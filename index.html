@@ -2,12 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mihael Edits</title>
-
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Archivo+Black&family=Titillium+Web:wght@700&display=swap" rel="stylesheet">
-
   <style>
     :root {
       --primary: #00bfff;
@@ -32,24 +29,47 @@
       min-height: 100vh;
       padding: 40px 20px;
       box-sizing: border-box;
+      position: relative;
+      z-index: 0;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('background.jpg') no-repeat center center;
+      background-size: cover;
+      opacity: 0.1;
+      filter: grayscale(100%) brightness(40%);
+      z-index: -1;
+    }
+
+    /* Logo top-left */
+    #top-left-logo {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      width: 60px;
+      height: 60px;
+      z-index: 1000;
+      cursor: pointer;
     }
 
     header {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       text-align: center;
-      padding: 0 0 60px;
-      width: 100%;
-      max-width: 1200px;
+      padding-bottom: 60px;
     }
 
     header h1 {
       font-family: 'Titillium Web', sans-serif;
       font-size: 5rem;
       font-weight: 700;
-      letter-spacing: 1px;
       text-transform: uppercase;
       display: flex;
       align-items: center;
@@ -66,7 +86,6 @@
       font-size: 2.5rem;
       font-weight: 600;
       margin-top: 15px;
-      font-family: 'Titillium Web', sans-serif;
     }
 
     .cards {
@@ -78,64 +97,38 @@
       margin-bottom: 80px;
     }
 
-    .card {
-      position: relative;
-      background: var(--soft);
+    .cards .card {
+      background: linear-gradient(145deg, #3a3a3a, #2a2a2a);
       padding: 60px;
       border-radius: var(--radius);
       font-size: 2.4rem;
       font-weight: 700;
       cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
       color: var(--text);
       text-transform: uppercase;
       font-family: 'Titillium Web', sans-serif;
-      user-select: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       text-align: center;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 150px;
+      box-shadow: 5px 5px 15px rgba(0,0,0,0.6), -5px -5px 15px rgba(60,60,60,0.8);
+      border: 1px solid #444;
+      background-clip: padding-box;
     }
 
-    .card:hover {
-      transform: scale(1.05);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      top: -3px;
-      left: -3px;
-      width: calc(100% + 6px);
-      height: calc(100% + 6px);
-      border-radius: calc(var(--radius) + 3px);
-      pointer-events: none;
-      opacity: 0;
-      background: linear-gradient(90deg, transparent, var(--line), transparent);
-      background-size: 300% 100%;
-      z-index: 10;
-    }
-
-    .card:hover::before {
-      opacity: 1;
-      animation: border-line 1.5s linear;
-    }
-
-    @keyframes border-line {
-      0% {
-        background-position: 0% 0%;
-      }
-      100% {
-        background-position: 300% 0%;
-      }
+    .cards .card:hover {
+      transform: scale(1.07);
+      box-shadow: 0 8px 24px rgba(0, 191, 255, 0.8), inset 0 0 10px rgba(0, 191, 255, 0.4);
+      background: linear-gradient(145deg, #007acc, #005f99);
+      color: #e0f7ff;
     }
 
     .section {
       padding: 80px 20px;
-      max-width: 1000px;
-      margin: auto;
+      max-width: 1100px;
       display: none;
       font-size: 1.3rem;
       line-height: 1.8;
@@ -156,33 +149,109 @@
       color: var(--primary);
       margin-bottom: 30px;
       text-align: center;
-      font-family: 'Titillium Web', sans-serif;
       text-transform: uppercase;
     }
 
-    p, li {
-      font-size: 1.25rem;
-      line-height: 1.8;
-    }
-
-    ul {
-      padding-left: 30px;
-    }
-
-    .portfolio iframe {
-      width: 100%;
-      height: 400px;
+    .example-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
       margin-bottom: 30px;
-      border-radius: 16px;
-      border: none;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+      flex-wrap: wrap;
+    }
+
+    .example-tab {
+      font-size: 2.4rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding-bottom: 6px;
+      color: var(--text);
+      border-bottom: 3px solid transparent;
+      transition: border-color 0.3s ease, color 0.3s ease;
+      user-select: none;
+      text-transform: uppercase;
+    }
+
+    .example-tab:hover {
+      color: var(--primary);
+    }
+
+    .example-tab.active {
+      border-bottom: 3px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .portfolio-example {
+      display: none;
+    }
+
+    .portfolio-example.active {
+      display: block;
+    }
+
+    .example-title {
+      font-size: 2.4rem;
+      font-weight: bold;
+      margin: 50px 0 20px;
+      text-align: center;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    .video-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 80px;
+      justify-content: center;
+      margin-top: 50px;
+      max-width: 100%;
+    }
+
+    .video-left {
+      flex: 0 0 auto;
+      margin-right: auto;
+    }
+
+    .video-right {
+      flex: 0 0 auto;
+      margin-left: auto;
+    }
+
+    .video-left video {
+      height: 540px;
+      width: auto;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .video-right video {
+      height: 800px;
+      aspect-ratio: 9/16;
+      width: auto;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      background-color: black;
+    }
+
+    #example1 p,
+    #example2 p,
+    #example3 p {
+      font-size: 1.5rem;
+      line-height: 1.9;
+    }
+
+    #example3 video {
+      height: 1000px !important;
+      width: auto !important;
+      object-fit: contain !important;
+      background-color: black !important;
     }
 
     .contact-section {
       text-align: center;
       margin: 60px auto 40px;
       max-width: 1200px;
-      width: 100%;
     }
 
     .contact-section a {
@@ -216,50 +285,47 @@
       height: 22px;
     }
 
-    /* Fixed logo top-left corner */
-    .fixed-logo {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      width: 80px;
-      height: auto;
-      z-index: 1000;
-      user-select: none;
-      pointer-events: none;
+    @media (max-width: 900px) {
+      .video-container {
+        flex-direction: column;
+        gap: 30px;
+        align-items: center;
+      }
+
+      .video-left video,
+      .video-right video {
+        width: 100% !important;
+        height: auto !important;
+      }
+
+      .video-left,
+      .video-right {
+        margin: 0 auto !important;
+      }
     }
 
-    @media (max-width: 720px) {
-      header h1 {
-        font-size: 3.5rem;
-      }
-      header p {
-        font-size: 1.8rem;
-      }
-      .card {
-        font-size: 1.8rem;
-        padding: 40px;
-      }
-      .portfolio iframe {
-        height: 250px;
-      }
-      .contact-section a {
-        font-size: 1.3rem;
-        padding: 15px 30px;
-      }
-      .email {
-        font-size: 1rem;
-      }
-      .fixed-logo {
-        width: 60px;
-        top: 15px;
-        left: 15px;
-      }
+    .highlighted {
+      background-color: white;
+      color: black;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    /* About Me Image Styling */
+    #about img {
+      display: block;
+      max-width: 500px;
+      width: 100%;
+      margin: 40px auto 0;
+      border-radius: 16px;
     }
   </style>
 </head>
 <body>
 
-  <img src="MihaelLogo2.png" alt="Mihael Logo" class="fixed-logo" />
+  <!-- Top-left logo -->
+  <img id="top-left-logo" src="MihaelLogo2.png" alt="Mihael Logo">
 
   <header>
     <h1>
@@ -282,6 +348,7 @@
       Whether it's a reel, podcast clip, or full-length video, I bring visual energy, clean transitions, subtitles, and that extra polish
       that makes your video stand out in today’s social media-driven world.
     </p>
+    <img src="aboutme.jpg" alt="Mihael Portrait">
   </div>
 
   <div id="services" class="section">
@@ -295,39 +362,92 @@
     </ul>
   </div>
 
-  <div id="portfolio" class="section portfolio">
+  <div id="portfolio" class="section">
     <h2>Portfolio Videos</h2>
-    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
-    <iframe src="https://player.vimeo.com/video/76979871" allowfullscreen></iframe>
+
+    <div class="example-tabs">
+      <div class="example-tab active" onclick="showExample('example1')">EXAMPLE 1</div>
+      <div class="example-tab" onclick="showExample('example2')">EXAMPLE 2</div>
+      <div class="example-tab" onclick="showExample('example3')">EXAMPLE 3</div>
+    </div>
+
+    <div id="example1" class="portfolio-example active">
+      <div class="example-title">LONG-FORM TO SHORT-FORM EDITING</div>
+      <p>
+        This is a highlight clip taken from a long-form YouTube video. The example showcases a side-by-side comparison of the original footage and the final edited reel. The reel features advanced color grading, <span class="highlighted">dynamic face-tracking</span> to follow the speaker’s movement, and smooth, high-energy transitions. It includes sharp, attention-grabbing subtitles, <span class="highlighted">a strong hook</span>, impactful zoom-ins, and layered visual effects. The original background audio was cleanly removed and replaced with a custom soundtrack, perfectly synced with the speaker’s voice for a polished, glitch-free experience.
+      </p>
+      <div class="video-container">
+        <div class="video-left">
+          <video controls>
+            <source src="2025-08-07 18-37-26.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="video-right">
+          <video controls>
+            <source src="EXPORTED.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+
+    <div id="example2" class="portfolio-example">
+      <div class="example-title">VIDEO MOTION</div>
+      <p>
+        This tool enhances video smoothness by <span class="highlighted">intelligently increasing motion speed.</span> If your footage feels choppy or laggy, this solution will seamlessly refine it for a more fluid viewing experience. Ideal for both longer videos and short-form reels, it’s currently in active development and poised to deliver even <span class="highlighted">more advanced performance</span> very soon.
+      </p>
+      <div class="video-container" style="justify-content: center;">
+        <video controls controlsList="nofullscreen" style="aspect-ratio: 16/9; width: 100%; max-width: 1000px; height: auto; object-fit: cover; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); background-color: black;">
+          <source src="NEXT-GEN.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <div id="example3" class="portfolio-example">
+      <div class="example-title">VISUAL EFFECTS</div>
+      <p>
+        This video showcases a cinematic reel built entirely around <span class="highlighted">high-impact visual effects.</span> It blends A-rolls and B-rolls with advanced opacity transitions,
+        stylized animated typography, and haunting sound design. The voiceover was <span class="highlighted">carefully processed</span> to create a dark, atmospheric tone perfectly synchronized with the music tempo — combining video editing with music production to deliver a deeply immersive result.
+      </p>
+      <div class="video-container" style="justify-content: center;">
+        <video controls>
+          <source src="DRAZZER_CINEMATIC_TRIM.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
   </div>
 
   <div class="contact-section">
     <a href="mailto:mihael@mihaeledits.com">Contact Me</a>
-    <div class="email">
+    <div class="email" style="justify-content: center; display: flex; align-items: center; gap: 10px; margin-top: 20px; font-size: 1.2rem; color: #ccc;">
       <span>mihael@mihaeledits.com</span>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Twitter_Verified_Badge.svg" alt="verified">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Twitter_Verified_Badge.svg" alt="verified" width="22" height="22" />
     </div>
   </div>
 
   <script>
-    let activeSection = null;
-
     function toggleSection(id) {
-      const clickedSection = document.getElementById(id);
-      const isActive = clickedSection.classList.contains('active');
-
-      document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
-
-      if (!isActive) {
-        clickedSection.classList.add('active');
-        clickedSection.scrollIntoView({ behavior: 'smooth' });
-        activeSection = id;
-      } else {
-        activeSection = null;
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+      const section = document.getElementById(id);
+      const isVisible = section.classList.contains('active');
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      if (!isVisible) {
+        section.classList.add('active');
+        section.scrollIntoView({behavior: 'smooth'});
       }
     }
-  </script>
 
+    function showExample(id) {
+      // Pause and reset all videos inside any currently active example(s)
+      document.querySelectorAll('.portfolio-example.active video').forEach(video => {
+        video.pause();
+        video.currentTime = 0;
+      });
+
+      document.querySelectorAll('.example-tab').forEach(tab => tab.classList.remove('active'));
+      event.target.classList.add('active');
+
+      document.querySelectorAll('.portfolio-example').forEach(example => example.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+  </script>
 </body>
 </html>
