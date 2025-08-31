@@ -3,229 +3,370 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mihael Edits</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Archivo+Black&family=Titillium+Web:wght@700&display=swap" rel="stylesheet">
+  <title>Mihael Edits – Cinematic Video Editing</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Titillium+Web:wght@600;700&display=swap" rel="stylesheet">
+
   <style>
     :root{
-      --primary:#00bfff; /* cyan */
-      --primary-2:#6ee7ff; /* lighter accent */
-      --text:#f0f0f0;
-      --muted:#b8c0cc;
-      --bg-1:#090909;
-      --bg-2:#111319;
+      --primary:#00bfff;
+      --primary-2:#6ee7ff;
+      --text:#eaf2ff;
+      --muted:#b6c2d3;
+      --bg-1:#07080a;
+      --bg-2:#0b0e14;
       --glass:rgba(255,255,255,.06);
       --line:rgba(255,255,255,.12);
-      --radius:20px;
-      --shadow:0 20px 60px rgba(0,0,0,.5);
+      --radius:22px;
+      --shadow:0 24px 80px rgba(0,0,0,.55);
+      --max:1200px;
     }
 
-    /* ===== Base ===== */
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0;
+      margin:0; color:var(--text);
       font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--text);
-      background: radial-gradient(1000px 800px at 10% -10%, rgba(0,191,255,.18), transparent 60%),
-                  radial-gradient(900px 700px at 110% 10%, rgba(0,191,255,.12), transparent 60%),
-                  radial-gradient(700px 500px at 50% 110%, rgba(0,191,255,.08), transparent 60%),
-                  linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      overflow-x:hidden;
-      scroll-behavior:smooth;
+      background:
+        radial-gradient(1200px 900px at -10% -10%, rgba(0,191,255,.20), transparent 60%),
+        radial-gradient(800px 700px at 110% 0%, rgba(0,191,255,.12), transparent 60%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      overflow-x:hidden; scroll-behavior:smooth;
     }
 
-    /* Subtle animated noise texture */
-    .grain{position:fixed;inset:0;pointer-events:none;opacity:.12;mix-blend-mode:soft-light;background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity=".6"/></svg>');animation:grain 6s steps(6) infinite}
+    /* Animated grain / vignette */
+    .grain{position:fixed;inset:0;pointer-events:none;opacity:.10;mix-blend-mode:soft-light;background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity=".6"/></svg>');animation:grain 6s steps(6) infinite}
     @keyframes grain{to{transform:translate3d(-160px,-160px,0)}}
+    .vignette:before{content:"";position:fixed;inset:-20px;background:radial-gradient(70% 70% at 50% 50%, transparent 0%, rgba(0,0,0,.35) 100%);pointer-events:none}
 
-    /* ===== Header ===== */
-    #top-left-logo{position:fixed;top:20px;left:20px;width:60px;height:60px;z-index:20;cursor:pointer;filter:drop-shadow(0 6px 18px rgba(0,191,255,.25));transition:transform .3s ease}
+    /* Top-left logo */
+    #top-left-logo{position:fixed;top:18px;left:18px;width:56px;height:56px;z-index:30;cursor:pointer;filter:drop-shadow(0 8px 22px rgba(0,191,255,.35));transition:transform .35s}
     #top-left-logo:hover{transform:scale(1.06) rotate(-2deg)}
 
-    header{max-width:1200px;margin:120px auto 40px;padding:0 24px;text-align:center}
-    header h1{
-      margin:0;
-      font-family:'Titillium Web',sans-serif;
-      font-weight:700;
-      font-size:clamp(2.6rem,6vw,5.2rem);
-      letter-spacing:.06em;
-      text-transform:uppercase;
-      line-height:1;
-      display:inline-flex;gap:14px;align-items:center;justify-content:center;
-      background:linear-gradient(90deg,#eaf6ff, var(--primary-2));
-      -webkit-background-clip:text;background-clip:text;color:transparent;
-      filter:drop-shadow(0 10px 30px rgba(0,191,255,.15));
+    /* ================== NAV (sticky) ================== */
+    .nav{
+      position:fixed;top:16px;left:50%;transform:translateX(-50%);
+      z-index:25; display:flex; gap:10px; align-items:center;
+      padding:8px; border-radius:999px; border:1px solid var(--line);
+      background:rgba(8,10,14,.55); backdrop-filter:blur(12px);
+      box-shadow:0 12px 40px rgba(0,0,0,.3);
     }
-    header h1 img{width:42px;height:42px;filter:drop-shadow(0 0 14px rgba(0,191,255,.7));animation:badgePulse 2.2s ease-in-out infinite}
-    @keyframes badgePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+    .nav a{
+      text-decoration:none; color:#dff6ff; font-weight:700;
+      font-family:'Titillium Web',sans-serif; letter-spacing:.04em;
+      padding:10px 16px; border-radius:999px; position:relative;
+      transition:transform .2s;
+    }
+    .nav a:hover{transform:translateY(-2px)}
+    .nav a.active{color:#041118;background:linear-gradient(90deg,#9bedff,#00bfff)}
 
-    header p{margin:18px auto 0;font-size:clamp(1.1rem,2.4vw,2rem);font-weight:600;color:var(--muted)}
+    /* ================== HERO ================== */
+    header{
+      max-width:var(--max); margin:120px auto 60px; padding:0 24px; text-align:center; position:relative;
+    }
+    .hero-wrap{
+      position:relative; border:1px solid var(--line); border-radius:28px; overflow:hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+    }
+    .hero-bg{
+      position:absolute; inset:0; overflow:hidden; z-index:0;
+      background:
+        radial-gradient(60% 120% at 80% -10%, rgba(0,191,255,.18), transparent 60%),
+        radial-gradient(60% 120% at 0% 110%, rgba(0,191,255,.10), transparent 60%);
+    }
+    .blob{position:absolute; width:520px; height:520px; border-radius:50%;
+      filter:blur(60px); opacity:.26; animation:blob 16s ease-in-out infinite; background:conic-gradient(from 0deg, rgba(0,191,255,.35), rgba(255,255,255,.0) 60%);}
+    .blob.b1{top:-140px; left:-120px}
+    .blob.b2{bottom:-160px; right:-160px; animation-delay:-8s}
+    @keyframes blob{
+      0%{transform:translate(0,0) scale(1)}
+      33%{transform:translate(40px,-30px) scale(1.08)}
+      66%{transform:translate(-30px,20px) scale(.96)}
+      100%{transform:translate(0,0) scale(1)}
+    }
 
-    /* ===== Cards / Nav ===== */
-    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px;max-width:1200px;margin:46px auto 0;padding:0 24px}
+    .hero-inner{position:relative; z-index:1; padding:64px 20px 40px}
+    h1{
+      margin:0; line-height:1.03; text-transform:uppercase;
+      font-family:'Titillium Web',sans-serif; font-weight:800;
+      font-size:clamp(2.6rem,6vw,5.6rem); letter-spacing:.06em;
+      background:linear-gradient(90deg,#eaf6ff, var(--primary-2)); -webkit-background-clip:text; color:transparent;
+      filter:drop-shadow(0 12px 30px rgba(0,191,255,.25));
+    }
+    .badge{display:inline-flex; align-items:center; gap:10px; margin:18px auto 6px; color:var(--muted); font-weight:600; font-size:clamp(1rem,2.2vw,1.35rem)}
+    .badge img{width:26px;height:26px;filter:drop-shadow(0 0 14px rgba(0,191,255,.7)); animation:badgePulse 2.2s ease-in-out infinite}
+    @keyframes badgePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+
+    .hero-cta{margin-top:24px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap}
+    .btn{
+      display:inline-flex; align-items:center; gap:10px; text-decoration:none; cursor:pointer;
+      font-weight:800; letter-spacing:.04em; border-radius:14px; padding:14px 22px; border:1px solid var(--line);
+      color:#061118; background:linear-gradient(90deg,#9bedff,#00bfff);
+      box-shadow:0 20px 60px rgba(0,191,255,.30); transition:transform .2s, box-shadow .2s;
+    }
+    .btn:hover{transform:translateY(-2px); box-shadow:0 26px 70px rgba(0,191,255,.35)}
+    .btn.ghost{background:transparent; color:#dff6ff; border-color:var(--line)}
+    .btn.ghost:hover{background:rgba(255,255,255,.06)}
+    .mini{display:block; color:var(--muted); margin-top:10px}
+
+    /* Quick stats */
+    .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; padding:20px; margin-top:14px}
+    .stat{background:rgba(255,255,255,.05); border:1px solid var(--line); border-radius:16px; padding:16px; text-align:center}
+    .stat strong{display:block; font-size:clamp(1.4rem,3.2vw,2rem)}
+    .stat span{color:var(--muted); font-size:.95rem}
+
+    /* =============== CARDS / SECTION NAV =============== */
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:26px;max-width:var(--max);margin:46px auto 0;padding:0 24px}
     .card{
-      position:relative;
-      isolation:isolate;
+      position:relative; isolation:isolate;
       background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));
-      border:1px solid var(--line);
-      border-radius:calc(var(--radius) + 4px);
-      padding:28px 26px; height:120px;display:grid;place-items:center;
-      text-transform:uppercase;font-family:'Titillium Web',sans-serif;font-weight:700;font-size:clamp(1.2rem,2.2vw,1.6rem);
-      color:#e8f7ff;cursor:pointer;box-shadow:var(--shadow);
-      transition:transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s ease, border-color .3s ease;
+      border:1px solid var(--line); border-radius:calc(var(--radius) + 2px);
+      padding:26px; height:116px; display:grid; place-items:center;
+      text-transform:uppercase; font-family:'Titillium Web',sans-serif; font-weight:800;
+      font-size:clamp(1.05rem,2.1vw,1.3rem); color:#e8f7ff; cursor:pointer;
+      box-shadow:var(--shadow);
+      transition:transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .4s, border-color .3s;
     }
-    .card::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:conic-gradient(from 180deg, transparent, rgba(0,191,255,.35), transparent 60%);-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:.0;transition:opacity .4s}
-    .card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 30px 80px rgba(0,191,255,.15)}
+    .card::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:conic-gradient(from 180deg, transparent, rgba(0,191,255,.35), transparent 60%);-webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s}
+    .card:hover{transform:translateY(-6px) scale(1.02); box-shadow:0 32px 90px rgba(0,191,255,.18)}
     .card:hover::before{opacity:1}
-
-    /* Magnetic hover light */
     .card .glow{position:absolute;inset:0;border-radius:inherit;background:radial-gradient(220px 160px at var(--mx,50%) var(--my,50%), rgba(0,191,255,.18), transparent 60%);opacity:0;transition:opacity .35s}
     .card:hover .glow{opacity:1}
 
-    /* ===== Sections ===== */
-    .section{max-width:1100px;margin:80px auto 0;padding:0 24px 40px;display:none}
+    /* =============== GENERIC SECTIONS =============== */
+    .section{max-width:var(--max);margin:80px auto 0;padding:0 24px 40px;display:none}
     .section.active{display:block;animation:fadeIn .7s ease both}
     @keyframes fadeIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
-
     h2{font-size:clamp(1.6rem,3vw,2.2rem);text-align:center;text-transform:uppercase;margin:0 0 26px;background:linear-gradient(90deg,#dff6ff,var(--primary));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .lead{color:#dfe8f6; text-align:center; max-width:860px; margin:0 auto 24px}
 
-    #about p,#services li,#example1 p,#example2 p,#example3 p{font-size:clamp(1rem,1.6vw,1.25rem);line-height:1.85;color:#e9edf3}
+    /* About */
+    #about p{font-size:clamp(1rem,1.6vw,1.15rem);line-height:1.9;color:#e9edf3}
+    #about .about-grid{display:grid;grid-template-columns:1.2fr .8fr; gap:26px; align-items:center}
+    #about img{display:block;max-width:520px;width:100%;margin:0 auto;border-radius:18px;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.5), 0 0 0 4px rgba(0,191,255,.08) inset}
+    .timeline{margin-top:22px;display:grid;gap:12px}
+    .timeline-item{background:rgba(255,255,255,.05); border:1px solid var(--line); border-radius:14px; padding:14px 16px}
+    .timeline-item strong{display:block}
 
-    /* About image */
-    #about img{display:block;max-width:520px;width:100%;margin:32px auto 0;border-radius:18px;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.5), 0 0 0 4px rgba(0,191,255,.08) inset}
+    /* Services */
+    #services ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+    #services li{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+    #services li span{display:block;color:var(--muted);margin-top:6px}
 
-    /* Services list */
-    #services ul{list-style:none;padding:0;margin:0;display:grid;gap:14px}
-    #services li{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow)}
-
-    /* Tabs */
-    .example-tabs{display:flex;justify-content:center;gap:20px;margin:6px auto 22px;padding:8px;border-radius:999px;background:rgba(255,255,255,.05);backdrop-filter:blur(8px);border:1px solid var(--line);max-width:760px}
-    .example-tab{position:relative;padding:10px 18px;border-radius:999px;font-family:'Titillium Web',sans-serif;font-weight:700;cursor:pointer;user-select:none;letter-spacing:.04em;color:#cfefff;transition:transform .2s}
+    /* Portfolio tabs */
+    .example-tabs{display:flex;justify-content:center;gap:14px;margin:6px auto 24px;padding:8px;border-radius:999px;background:rgba(255,255,255,.05);backdrop-filter:blur(8px);border:1px solid var(--line);max-width:780px}
+    .example-tab{position:relative;padding:10px 18px;border-radius:999px;font-family:'Titillium Web',sans-serif;font-weight:800;cursor:pointer;user-select:none;letter-spacing:.04em;color:#cfefff;transition:transform .2s}
     .example-tab:hover{transform:translateY(-2px)}
     .example-tab.active{color:#061018;background:linear-gradient(90deg,#8be8ff,#00bfff)}
-
     .portfolio-example{display:none}
     .portfolio-example.active{display:block}
-
-    .example-title{font-size:clamp(1.2rem,2.4vw,1.6rem);font-weight:700;margin:32px 0 10px;text-align:center;text-transform:uppercase;color:var(--primary)}
+    .example-title{font-size:clamp(1.1rem,2.2vw,1.4rem);font-weight:800;margin:30px 0 10px;text-align:center;text-transform:uppercase;color:var(--primary)}
 
     /* Video showcase */
-    .video-container{display:flex;align-items:flex-start;gap:56px;justify-content:center;margin-top:30px;max-width:100%}
-    .video-left,.video-right{position:relative}
-
+    .video-container{display:flex;align-items:flex-start;gap:56px;justify-content:center;margin-top:24px;max-width:100%}
     .video-left video,.video-right video{border-radius:16px;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.55), 0 0 0 4px rgba(0,191,255,.08) inset;transition:transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s}
     .video-left video:hover,.video-right video:hover{transform:translateY(-4px) scale(1.01);box-shadow:0 50px 120px rgba(0,191,255,.18)}
-
     .video-left video{height:540px;width:auto}
     .video-right video{height:800px;aspect-ratio:9/16;width:auto;object-fit:contain;background:#000}
-
     #example3 video{height:1000px !important;width:auto !important;object-fit:contain !important;background:#000 !important}
 
-    .highlighted{background:#fff;color:#000;padding:2px 6px;border-radius:6px;font-weight:600}
+    .highlighted{background:#fff;color:#000;padding:2px 6px;border-radius:6px;font-weight:700}
+
+    /* Packages */
+    .pricing{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:8px}
+    .plan{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:18px;padding:20px;position:relative;overflow:hidden}
+    .plan h3{margin:0 0 6px}
+    .price{font-size:1.8rem;font-weight:800}
+    .plan ul{margin:12px 0 0; padding-left:18px}
+    .plan .buy{margin-top:14px}
+
+    /* Testimonials (auto-scroll) */
+    .carousel{overflow:hidden;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.05)}
+    .track{display:flex;gap:16px; padding:16px; animation:slide 22s linear infinite}
+    @keyframes slide{
+      from{transform:translateX(0)}
+      to{transform:translateX(-50%)}
+    }
+    .quote{min-width:340px;max-width:340px;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:14px}
+    .quote strong{display:block;margin-bottom:6px}
+
+    /* FAQ */
+    .faq{max-width:var(--max); margin:0 auto; display:grid; gap:10px}
+    .faq details{background:rgba(255,255,255,.05); border:1px solid var(--line); border-radius:14px; padding:12px 16px}
+    .faq summary{cursor:pointer; font-weight:700}
+    .faq p{color:#dfe8f6}
 
     /* Contact */
-    .contact-section{ text-align:center; margin:70px auto 40px; max-width:1200px; padding:0 24px }
-    .cta-btn{display:inline-block;font-size:clamp(1rem,1.8vw,1.2rem);font-weight:700;color:#061018;background:linear-gradient(90deg,#8be8ff,#00bfff);padding:16px 30px;border-radius:14px;text-decoration:none;box-shadow:0 18px 50px rgba(0,191,255,.28);transition:transform .2s}
+    .contact-section{ text-align:center; margin:70px auto 40px; max-width:var(--max); padding:0 24px }
+    .cta-btn{display:inline-block;font-size:clamp(1rem,1.8vw,1.2rem);font-weight:800;color:#061118;background:linear-gradient(90deg,#8be8ff,#00bfff);padding:16px 30px;border-radius:14px;text-decoration:none;box-shadow:0 18px 50px rgba(0,191,255,.28);transition:transform .2s}
     .cta-btn:hover{transform:translateY(-2px)}
     .email{margin-top:18px;font-size:1.05rem;color:#d3dbe6;display:flex;justify-content:center;gap:10px;align-items:center}
     .email img{width:22px;height:22px;filter:drop-shadow(0 0 10px rgba(0,191,255,.6))}
 
-    /* ===================== Responsive ===================== */
-    @media (max-width: 900px){
-      .video-container{flex-direction:column;gap:22px;align-items:center}
-      .video-left video,.video-right video{width:100% !important;height:auto !important}
+    /* Sticky footer CTA */
+    .sticky-cta{
+      position:fixed; bottom:16px; left:50%; transform:translateX(-50%);
+      z-index:24; display:flex; gap:10px; align-items:center;
+      background:rgba(8,10,14,.65); backdrop-filter:blur(12px);
+      padding:8px; border:1px solid var(--line); border-radius:999px;
+      box-shadow:0 16px 50px rgba(0,0,0,.35)
     }
+    .sticky-cta .btn{padding:10px 16px; font-weight:700}
 
-    /* Phone-specific tuning */
+    /* Responsive */
+    @media (max-width: 980px){
+      .stats{grid-template-columns:repeat(2,1fr)}
+      #about .about-grid{grid-template-columns:1fr; gap:18px}
+      .video-container{flex-direction:column; gap:18px; align-items:center}
+      .video-left video,.video-right video{width:100% !important; height:auto !important}
+    }
     @media (max-width: 640px){
-      /* Smaller logo, tighter header */
-      #top-left-logo{width:44px;height:44px;top:14px;left:14px}
-      header{margin:84px auto 28px}
-      header p{font-size:1rem}
-
-      /* Title true visual centering with badge */
-      header h1{display:flex;justify-content:center;align-items:center;gap:8px;text-align:center;line-height:1.15}
-      header h1 img{width:28px;height:28px;position:relative;top:2px;filter:drop-shadow(0 0 8px rgba(0,191,255,.55))}
-
-      /* Single-column cards */
-      .cards{grid-template-columns:1fr;gap:14px;padding:0 16px}
-      .card{height:88px;padding:18px;font-size:1rem}
-
-      /* Sections spacing */
-      .section{margin:36px auto 0;padding:0 16px 28px}
-      #about img{margin-top:18px;border-radius:14px}
-
-      /* Scrollable tabs on small screens */
-      .example-tabs{gap:10px;padding:8px;justify-content:flex-start;overflow-x:auto;-webkit-overflow-scrolling:touch}
-      .example-tab{flex:0 0 auto;padding:8px 14px}
-
-      /* Videos fill width */
-      .video-left video,.video-right video{width:100% !important;height:auto !important}
-
-      /* Example 3 video height cap */
-      #example3 video{max-height:70vh !important;width:100% !important;height:auto !important;object-fit:contain !important}
-
-      /* CTA */
-      .cta-btn{display:block;width:100%;text-align:center;padding:14px 18px}
-      .email{font-size:.95rem}
-
-      /* Softer grain for perf */
-      .grain{opacity:.08}
+      #top-left-logo{width:44px;height:44px;top:12px;left:12px}
+      header{margin:96px auto 40px}
+      .nav{display:none}
+      .hero-inner{padding:48px 16px 24px}
+      .stats{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr}
+      .card{height:92px}
+      .grain{opacity:.07}
     }
 
-    /* Reveal on scroll */
-    .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease, transform .6s ease}
-    .reveal.visible{opacity:1;transform:none}
+    /* Reveal */
+    .reveal{opacity:0; transform:translateY(14px); transition:opacity .6s ease, transform .6s ease}
+    .reveal.visible{opacity:1; transform:none}
 
     /* Reduced motion */
     @media (prefers-reduced-motion:reduce){
-      *{animation:none !important;transition:none !important}
+      *{animation:none !important; transition:none !important}
       .grain{display:none}
+      .track{animation:none}
     }
   </style>
 </head>
-<body>
+<body class="vignette">
   <span class="grain" aria-hidden="true"></span>
 
-  <!-- Top-left logo -->
-  <img id="top-left-logo" src="MihaelLogo2.png" alt="Mihael Logo">
+  <!-- Floating logo -->
+  <img id="top-left-logo" src="MihaelLogo2.png" alt="Mihael Logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
 
-  <header class="reveal">
-    <h1>
-      MIHAEL EDITS
-      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Twitter_Verified_Badge.svg" alt="verified">
-    </h1>
-    <p>Professional Video Editing — High-Impact Reels & More</p>
+  <!-- Sticky nav -->
+  <nav class="nav">
+    <a href="#about" class="nav-link">About</a>
+    <a href="#services" class="nav-link">Services</a>
+    <a href="#portfolio" class="nav-link">Portfolio</a>
+    <a href="#packages" class="nav-link">Packages</a>
+    <a href="#faq" class="nav-link">FAQ</a>
+    <a href="#contact" class="nav-link">Contact</a>
+  </nav>
+
+  <!-- HERO -->
+  <header>
+    <div class="hero-wrap reveal">
+      <div class="hero-bg">
+        <div class="blob b1"></div>
+        <div class="blob b2"></div>
+      </div>
+
+      <div class="hero-inner">
+        <div class="badge">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Twitter_Verified_Badge.svg" alt="verified">
+          Professional Video Editing — High-Impact Reels & More
+        </div>
+        <h1>MIHAEL&nbsp;EDITS</h1>
+
+        <div class="hero-cta">
+          <a class="btn" href="mailto:mihael@mihaeledits.com">Get A Free Cut</a>
+          <a class="btn ghost" href="#portfolio">See Portfolio</a>
+          <span class="mini">24–48h turnaround • Brand-matched styling • Hook-first storytelling</span>
+        </div>
+
+        <!-- Quick stats -->
+        <div class="stats">
+          <div class="stat"><strong id="stat1">0</strong><span>Shorts/Reels Edited</span></div>
+          <div class="stat"><strong id="stat2">0</strong><span>Long-form Videos</span></div>
+          <div class="stat"><strong id="stat3">0M+</strong><span>Views Across Platforms</span></div>
+          <div class="stat"><strong id="stat4">0</strong><span>Happy Creators & Brands</span></div>
+        </div>
+      </div>
+    </div>
   </header>
 
+  <!-- Section jump cards -->
   <div class="cards reveal" id="nav-cards">
-    <div class="card" onclick="toggleSection('about')"><span>ABOUT ME</span><i class="glow"></i></div>
-    <div class="card" onclick="toggleSection('services')"><span>SERVICES</span><i class="glow"></i></div>
-    <div class="card" onclick="toggleSection('portfolio')"><span>PORTFOLIO VIDEOS</span><i class="glow"></i></div>
+    <div class="card" onclick="openSection('about')"><span>ABOUT ME</span><i class="glow"></i></div>
+    <div class="card" onclick="openSection('services')"><span>SERVICES</span><i class="glow"></i></div>
+    <div class="card" onclick="openSection('portfolio')"><span>PORTFOLIO VIDEOS</span><i class="glow"></i></div>
   </div>
 
-  <div id="about" class="section reveal">
+  <!-- ABOUT -->
+  <section id="about" class="section reveal">
     <h2>About Me</h2>
-    <p>
-      I'm Mihael, a passionate and professional video editor with a sharp focus on fast-paced, engaging face-to-camera content.
-      Whether it's a reel, podcast clip, or full-length video, I bring visual energy, clean transitions, subtitles, and that extra polish
-      that makes your video stand out in today’s social media-driven world.
-    </p>
-    <img src="aboutme.jpg" alt="Mihael Portrait">
-  </div>
+    <p class="lead">I craft thumb-stopping edits that hook in the first 3 seconds, keep watch-time high, and convert views into followers and customers.</p>
 
-  <div id="services" class="section reveal">
+    <div class="about-grid">
+      <div>
+        <p>
+          I’m Mihael—editor, motion nerd, and pacing addict. I turn long-form into snappy, on-brand shorts using dynamic framing,
+          rhythm-matched cuts, clean captions, and subtle SFX that sell the moment without shouting.
+        </p>
+        <div class="timeline">
+          <div class="timeline-item"><strong>Hook Architecture</strong> Cold opens, mid-sentence cuts, and visual reset beats to keep retention climbing.</div>
+          <div class="timeline-item"><strong>Hyper-Legible Captions</strong> Color-coded keywords, kinetic emphasis, and bounce timing for the ear + eye.</div>
+          <div class="timeline-item"><strong>Brand Fidelity</strong> Fonts, palettes, stroke weights, and sound beds that feel natively “you”.</div>
+        </div>
+      </div>
+
+      <div>
+        <!-- Replaced image block: full portrait + caption -->
+        <figure style="margin:0; text-align:center;">
+          <img
+            src="Founder.jpeg"
+            alt="Mihael — Founder"
+            style="
+              display:block;
+              width:100%;
+              height:auto;
+              max-width:520px;
+              margin:0 auto;
+              border-radius:18px;
+              border:1px solid var(--line);
+              box-shadow:0 30px 80px rgba(0,0,0,.5), 0 0 0 4px rgba(0,191,255,.08) inset;
+              object-fit:cover;
+            "
+          />
+          <figcaption
+            style="
+              margin-top:10px;
+              font-weight:700;
+              text-transform:uppercase;
+              letter-spacing:.08em;
+              color:var(--muted);
+            "
+          >
+            Founder
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="section reveal">
     <h2>Services</h2>
+    <p class="lead">From idea to export. I handle the pace, polish, and platform-fit so you can focus on performance.</p>
     <ul>
-      <li>🔥 Fast-Paced Instagram/TikTok Reels Editing</li>
-      <li>🎬 Long-Form Video Editing (YouTube, Podcasts)</li>
-      <li>💬 Dynamic Subtitles & Captions</li>
-      <li>⚡ Effects, Cuts & Transitions for Maximum Engagement</li>
-      <li>🎨 Custom Styling Based on Your Brand</li>
+      <li><strong>🔥 Reels/TikTok/Shorts</strong><span>Fast-cut, hook-first, face-tracking, kinetic captions, meme-aware pacing.</span></li>
+      <li><strong>🎬 Long-Form Editing</strong><span>Podcasts, interviews, tutorials: story structuring, motion inserts, B-roll sourcing.</span></li>
+      <li><strong>💬 Captions That Convert</strong><span>High-contrast, brand-matched, with keyword pops and beat-synced emphasis.</span></li>
+      <li><strong>⚡ Motion & Transitions</strong><span>Dolly/zoom cheats, warp expands, match-on-action, and seamless comping.</span></li>
+      <li><strong>🎨 Brand Systems</strong><span>Reusable templates for colors, fonts, lower thirds, and CTA end cards.</span></li>
     </ul>
-  </div>
+  </section>
 
-  <div id="portfolio" class="section reveal">
+  <!-- PORTFOLIO -->
+  <section id="portfolio" class="section reveal">
     <h2>Portfolio Videos</h2>
 
     <div class="example-tabs">
@@ -235,9 +376,10 @@
     </div>
 
     <div id="example1" class="portfolio-example active">
-      <div class="example-title">LONG-FORM TO SHORT-FORM EDITING</div>
+      <div class="example-title">LONG-FORM ➜ SHORT-FORM</div>
       <p>
-        This is a highlight clip taken from a long-form YouTube video. The example showcases a side-by-side comparison of the original footage and the final edited reel. The reel features advanced color grading, <span class="highlighted">dynamic face-tracking</span> to follow the speaker’s movement, and smooth, high-energy transitions. It includes sharp, attention-grabbing subtitles, <span class="highlighted">a strong hook</span>, impactful zoom-ins, and layered visual effects. The original background audio was cleanly removed and replaced with a custom soundtrack, perfectly synced with the speaker’s voice for a polished, glitch-free experience.
+        Side-by-side: raw vs final. Features advanced color, <span class="highlighted">dynamic face-tracking</span>, subtitle design, and beat-matched zooms.
+        The original bed is surgically removed and rebuilt with a custom sound design for a tight, glitch-free reel.
       </p>
       <div class="video-container">
         <div class="video-left">
@@ -254,41 +396,132 @@
     </div>
 
     <div id="example2" class="portfolio-example">
-      <div class="example-title">VIDEO MOTION</div>
+      <div class="example-title">MOTION SMOOTHING</div>
       <p>
-        This tool enhances video smoothness by <span class="highlighted">intelligently increasing motion speed.</span> If your footage feels choppy or laggy, this solution will seamlessly refine it for a more fluid viewing experience. Ideal for both longer videos and short-form reels, it’s currently in active development and poised to deliver even <span class="highlighted">more advanced performance</span> very soon.
+        A dev tool that <span class="highlighted">intelligently increases motion speed</span> to remove micro-stutters and choppiness. Ideal for reels and long-form with imperfect footage.
       </p>
-      <div class="video-container" style="justify-content: center;">
-        <video controls controlsList="nofullscreen" style="aspect-ratio: 16/9; width: 100%; max-width: 1000px; height: auto; object-fit: cover; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); background-color: black;">
+      <div class="video-container" style="justify-content:center;">
+        <video controls controlsList="nofullscreen" style="aspect-ratio:16/9;width:100%;max-width:1000px;height:auto;object-fit:cover;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.5);background:#000;">
           <source src="videos/NEXT-GEN.mp4" type="video/mp4">
         </video>
       </div>
     </div>
 
     <div id="example3" class="portfolio-example">
-      <div class="example-title">VISUAL EFFECTS</div>
+      <div class="example-title">VFX-DRIVEN CINEMATICS</div>
       <p>
-        This video showcases a cinematic reel built entirely around <span class="highlighted">high-impact visual effects.</span> It blends A-rolls and B-rolls with advanced opacity transitions,
-        stylized animated typography, and haunting sound design. The voiceover was <span class="highlighted">carefully processed</span> to create a dark, atmospheric tone perfectly synchronized with the music tempo — combining video editing with music production to deliver a deeply immersive result.
+        A reel built around <span class="highlighted">high-impact visual effects</span>, opacity stacks, animated typography, and a dark sound bed. Voice is processed to lock to the tempo—video editing meets music production.
       </p>
-      <div class="video-container" style="justify-content: center;">
+      <div class="video-container" style="justify-content:center;">
         <video controls>
-          <source src="videos/DRAZZER-CINEMA.mp4" type="video/mp4">
+          <source src="videos/DRAZZER_CINEMA.mp4" type="video/mp4">
         </video>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="contact-section reveal">
+  <!-- PACKAGES -->
+  <section id="packages" class="section reveal">
+    <h2>Packages</h2>
+    <p class="lead">Monthly or one-off—built for creators, coaches, and brands that want reliable output without hiring in-house.</p>
+
+    <div class="pricing">
+      <div class="plan">
+        <h3>Starter</h3>
+        <div class="price">$<strong>299</strong>/mo</div>
+        <ul>
+          <li>4 Reels/TikToks (≤30s)</li>
+          <li>Brand-matched captions</li>
+          <li>Color & audio polish</li>
+        </ul>
+        <a class="btn buy" href="mailto:mihael@mihaeledits.com?subject=Starter%20Plan">Choose Starter</a>
+      </div>
+
+      <div class="plan" style="outline:2px solid rgba(0,191,255,.35)">
+        <h3>Growth</h3>
+        <div class="price">$<strong>649</strong>/mo</div>
+        <ul>
+          <li>10 Reels/TikToks (≤45s)</li>
+          <li>Face-tracking & motion accents</li>
+          <li>Hook strategy support</li>
+          <li>Priority 48h turnaround</li>
+        </ul>
+        <a class="btn buy" href="mailto:mihael@mihaeledits.com?subject=Growth%20Plan">Choose Growth</a>
+      </div>
+
+      <div class="plan">
+        <h3>Creator Pro</h3>
+        <div class="price">$<strong>1290</strong>/mo</div>
+        <ul>
+          <li>Unlimited requests, one-at-a-time</li>
+          <li>YT edits + shorts</li>
+          <li>Templates & end cards</li>
+          <li>Weekly analytics check-in</li>
+        </ul>
+        <a class="btn buy" href="mailto:mihael@mihaeledits.com?subject=Creator%20Pro">Choose Pro</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section reveal">
+    <h2>Creator Feedback</h2>
+    <div class="carousel">
+      <div class="track" aria-hidden="true">
+        <div class="quote"><strong>@fitnesscoach</strong>“Watch-time jumped 38% in a week. The hooks slap.”</div>
+        <div class="quote"><strong>@saasfounder</strong>“He rebuilt our caption style—DM replies doubled.”</div>
+        <div class="quote"><strong>@podhost</strong>“Turnarounds are fast and the pacing is perfect.”</div>
+        <div class="quote"><strong>@creator</strong>“Zero mic bleed, clean music rides. Chef’s kiss.”</div>
+
+        <!-- duplicate for seamless loop -->
+        <div class="quote"><strong>@fitnesscoach</strong>“Watch-time jumped 38% in a week. The hooks slap.”</div>
+        <div class="quote"><strong>@saasfounder</strong>“He rebuilt our caption style—DM replies doubled.”</div>
+        <div class="quote"><strong>@podhost</strong>“Turnarounds are fast and the pacing is perfect.”</div>
+        <div class="quote"><strong>@creator</strong>“Zero mic bleed, clean music rides. Chef’s kiss.”</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section reveal">
+    <h2>FAQ</h2>
+    <div class="faq">
+      <details>
+        <summary>What do you need from me?</summary>
+        <p>Footage (Drive/Dropbox), brand colors/fonts (if any), and rough timecodes you love. I’ll handle the rest.</p>
+      </details>
+      <details>
+        <summary>Turnaround time?</summary>
+        <p>Usually 24–48 hours per deliverable. Growth/Pro plans get priority.</p>
+      </details>
+      <details>
+        <summary>Can you match my favorite creator’s style?</summary>
+        <p>Absolutely. I’ll build a lightweight style guide + reusable templates so output stays consistent.</p>
+      </details>
+      <details>
+        <summary>Do you handle thumbnails and end cards?</summary>
+        <p>Yes—on Growth and Pro plans. Thumbnails available à la carte for Starter.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact-section reveal">
     <a class="cta-btn" href="mailto:mihael@mihaeledits.com">Contact Me</a>
-    <div class="email" style="justify-content: center; display: flex; align-items: center; gap: 10px; margin-top: 20px; font-size: 1.2rem; color: #ccc;">
+    <div class="email">
       <span>mihael@mihaeledits.com</span>
       <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Twitter_Verified_Badge.svg" alt="verified" width="22" height="22" />
     </div>
+  </section>
+
+  <!-- Sticky CTA -->
+  <div class="sticky-cta" role="region" aria-label="Quick contact">
+    <a class="btn" href="mailto:mihael@mihaeledits.com">Start a Project</a>
+    <a class="btn ghost" href="#packages">See Packages</a>
   </div>
 
   <script>
-    // -------- Card glow follows cursor
+    // ---------- Magnetic glow on cards
     document.querySelectorAll('.card').forEach(card => {
       card.addEventListener('mousemove', e => {
         const r = card.getBoundingClientRect();
@@ -297,31 +530,84 @@
       });
     });
 
-    function toggleSection(id){
-      const section = document.getElementById(id);
-      const isVisible = section.classList.contains('active');
+    // ---------- Section toggler (cards) + smooth scroll
+    function openSection(id){
+      const el = document.getElementById(id);
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      if(!isVisible){
-        section.classList.add('active');
-        section.scrollIntoView({behavior:'smooth', block:'start'});
-      }
+      el.classList.add('active');
+      el.scrollIntoView({behavior:'smooth', block:'start'});
+      // highlight nav
+      document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));
+      const link = document.querySelector('.nav a[href="#'+id+'"]');
+      if(link) link.classList.add('active');
     }
 
-    // Preserve original functionality but add explicit event param
+    // ---------- Portfolio tab switcher
     function showExample(id, evt){
-      document.querySelectorAll('.portfolio-example.active video').forEach(v => {v.pause();v.currentTime = 0;});
-      document.querySelectorAll('.example-tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.portfolio-example.active video').forEach(v => { v.pause(); v.currentTime = 0; });
+      document.querySelectorAll('.example-tab').forEach(t => t.classList.remove('active'));
       if(evt) evt.currentTarget.classList.add('active');
       document.querySelectorAll('.portfolio-example').forEach(ex => ex.classList.remove('active'));
       document.getElementById(id).classList.add('active');
     }
 
-    // -------- Reveal on scroll
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => { if(entry.isIntersecting){ entry.target.classList.add('visible'); io.unobserve(entry.target); } });
-    }, {threshold:.15});
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    // ---------- Reveal on scroll
+    const io = new IntersectionObserver(entries=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting){ en.target.classList.add('visible'); io.unobserve(en.target); }
+      });
+    },{threshold:.15});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+    // ---------- Anchor nav active state on scroll
+    const secIds = ['about','services','portfolio','packages','faq','contact'];
+    const secMap = secIds.map(id=>document.getElementById(id));
+    window.addEventListener('scroll', ()=>{
+      const y = scrollY + innerHeight * .35;
+      let active = null;
+      for(const s of secMap){ if(s && s.offsetTop <= y) active = s.id; }
+      if(active){
+        document.querySelectorAll('.nav a').forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#'+active));
+      }
+    });
+
+    // ---------- Count-up stats (one-shot)
+    function countUp(el, target, dur=1600){
+      const start = performance.now();
+      function step(t){
+        const p = Math.min(1,(t-start)/dur);
+        el.textContent = Math.floor(target * (p*p*(3-2*p))).toLocaleString();
+        if(p<1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+    const statIo = new IntersectionObserver((entries)=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting){
+          countUp(document.getElementById('stat1'), 320);
+          countUp(document.getElementById('stat2'), 85);
+          const s3 = document.getElementById('stat3'); s3.textContent = '10M+';
+          countUp(document.getElementById('stat4'), 60);
+          statIo.disconnect();
+        }
+      });
+    },{threshold:.4});
+    statIo.observe(document.querySelector('.stats'));
+
+    // ---------- Smooth internal anchor links (nav)
+    document.querySelectorAll('.nav a').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const href = a.getAttribute('href');
+        if(href.startsWith('#')){
+          e.preventDefault();
+          const el = document.querySelector(href);
+          if(!el) return;
+          document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+          el.classList.add('active');
+          el.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+      });
+    });
   </script>
 </body>
-
 </html>
